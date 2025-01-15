@@ -1,0 +1,51 @@
+---
+- name: Test playbook
+  hosts: localhost #nom de l'hote (fichier host.yml)
+  tasks:
+    - name: Print message 
+      debug: 
+        msg: "Test de ansible en localhost"
+    
+    - name: Creation d'un fichier
+      file:
+        path: /tmp/test.txt
+        state: touch
+    
+    - name: Ajout d'un contenu au fichier
+      copy:
+        content: "Hello World"
+        dest: /tmp/test.txt
+        mode: 0644 # fichier est en lecture et écriture pour le propriétaire et en lecture pour les autres
+      
+    - name : Affichage du contenu du fichier 
+      command: cat /tmp/test.txt
+      register: result #Faire une variable nommer result pour stocker le résultat de la commande
+    
+    - name : Affichage du contenu du fichier
+      debug:
+        var: result.stdout #Afficher le contenu de la variable result
+
+- name: Test remote host
+  hosts: simulated_host
+  become: yes
+  tasks:
+    - name: Print message
+      debug:
+        msg: "Test de Ansible sur simulated_host"
+
+    - name: Update des packages Linux
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Installation de nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Lancement de nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+...

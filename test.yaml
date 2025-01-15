@@ -1,0 +1,24 @@
+- name: test
+  hosts: localhost
+  become: yes # permet de passer en mode super utilisateur
+  tasks: 
+  - name: task1
+    command : echo "Hello World"
+
+  - name: Package Update
+    ansible.builtin.apt :
+      update_cache: yes
+  
+  - name: Installation des dépendances
+    ansible.builtin.apt :
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+      state : present
+
+
+  - name: Ping google 
+    ansible.builtin.ping:
+      data: "www.google.com"

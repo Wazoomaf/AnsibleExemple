@@ -1,0 +1,14 @@
+all:
+  hosts:
+    localhost: #Nom a mettre dans le fichier test_tmp.yml
+      ansible_connection: local
+    remote_host: #Ajout d'un serveur pour l'exemple
+      ansible_host: 192.168.1.10
+      ansible_user: root
+      ansible_ssh_private_key_file: /home/user/.ssh/id_rsa
+    simulated_host:
+      ansible_connection: local
+      ansible_user: root
+      ansible_become : yes
+      ansible_become_method: sudo
+      ansible_password: test #Mot de passe de l'utilisateur root
